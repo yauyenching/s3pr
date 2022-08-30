@@ -3,6 +3,7 @@
   <img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue">
   <img src="https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white">
 </p>
+
 **Vision**: Program that can recategorize Sims 3 Pattern Custom Content (CC) and extract icons for better CC organization purposes.
 
 <br>
