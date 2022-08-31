@@ -1,5 +1,3 @@
-from importlib.abc import ResourceReader
-from ResourceChanger import ResourceChanger
 import clr
 clr.AddReference("../__libraries/s3pi/s3pi.Interfaces")
 clr.AddReference("../__libraries/s3pi/s3pi.WrapperDealer")
@@ -7,7 +5,8 @@ clr.AddReference("../__libraries/s3pi/s3pi.Package")
 clr.AddReference("../__libraries/s3pi/s3pi.ImageResource")
 clr.AddReference("System.Drawing")
 
-from s3pi.Interfaces import IResource
+from ResourceChanger import ResourceChanger
+from s3pi.Interfaces import IResource, IResourceIndexEntry
 from s3pi.Package import Package
 from s3pi.WrapperDealer import WrapperDealer
 import System.Drawing
@@ -18,16 +17,29 @@ import os
 class PatternRecategorizer:
     class NotPackageFile(Exception):
         pass
-    
+
     def recategorize(path: str, new_category: str) -> None:
         resource_changer = ResourceChanger(new_category)
-        
+
         filename, extension = os.path.splitext(path)
         if extension != '.package':
             raise PatternRecategorizer.NotPackageFile
         package = Package.OpenPackage(0, path, True)
+
+        def extract_resource(package: Package, indexEntry: IResourceIndexEntry) -> str:
+            resource = WrapperDealer.GetResource(0, package, indexEntry)
+            return System.Text.UTF8Encoding.UTF8.GetString(resource.AsBytes)
+
+        def write_resource(package: Package, indexEntry: IResourceIndexEntry,
+                           resource: IResource, resource_type: int) -> None:
+            # Create tmp resource file and write the new xml
+            tmp = WrapperDealer.CreateNewResource(0, str(resource_type))
+            tmp.Stream.Position = 0
+            System.IO.BinaryWriter(tmp.Stream).Write(bytes(resource, 'utf-8'))
+            # Replace the resource
+            package.ReplaceResource(indexEntry, tmp)
+
         resources = package.GetResourceList
-        
         for indexEntry in resources:
             resource_type = indexEntry.ResourceType
 
@@ -42,26 +54,17 @@ class PatternRecategorizer:
 
             # Get pattern xml ressource
             if resource_type == 0x0333406C:
-                xml_resource = WrapperDealer.GetResource(0, package, indexEntry)
-                stream = xml_resource.Stream
-                xml = System.Text.UTF8Encoding.UTF8.GetString(xml_resource.AsBytes)
+                xml_resource = extract_resource(package, indexEntry)
                 # Recategorize pattern in xml
-                xml = resource_changer.change_xml(xml)
-                # Create tmp resource file and write the new xml
-                tmp = WrapperDealer.CreateNewResource(0, str(resource_type))
-                tmp.Stream.Position = 0
-                System.IO.BinaryWriter(tmp.Stream).Write(bytes(xml, 'utf-8'));
-                # Replace the resource
-                package.ReplaceResource(indexEntry, tmp)
-                
-                
+                xml = resource_changer.change_xml(xml_resource)
+                write_resource(package, indexEntry, xml, resource_type)
+
             # Get patternlist resource
             if resource_type == 0xD4D9FBE5:
-                ptrn_resource = WrapperDealer.GetResource(0, package, indexEntry)
-                stream = ptrn_resource.Stream
-                ptrn = System.Text.UTF8Encoding.UTF8.GetString(ptrn_resource.AsBytes)
-                # print(xml)
-                
+                ptrn_resource = extract_resource(package, indexEntry)
+                # Recategorize pattern in ptrn
+                xml = resource_changer.change_ptrn(ptrn_resource)
+                write_resource(package, indexEntry, xml, resource_type)
+
         package.SavePackage()
         Package.ClosePackage(0, package)
-        

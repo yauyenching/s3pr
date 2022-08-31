@@ -1,6 +1,7 @@
-from PackageReader import PatternRecategorizer
-from ResourceChanger import ResourceChanger
+from PatternRecategorizer import PatternRecategorizer
+import os
 
+test_path = r'D:\Users\yenching\Desktop\sims\[s3pr]\test'
 test_file = 'Simlicious_pattern_AcidWashDenim_big.package'
 
 categories = ['Fabric',
@@ -19,9 +20,11 @@ categories = ['Fabric',
               'Masonry',
               'Rock_Stone']
 
-pattern = PatternRecategorizer.recategorize(test_file, categories[1])
-# pattern.change_category(categories[1])
-# print(pattern.xml)
-# print('\n')
-# print(pattern.ptrn)
+def recategorize_dir(path: str, new_category: str):
+    for filename in os.listdir(path):
+        f = os.path.join(path, filename)
+        PatternRecategorizer.recategorize(f, new_category)
+
+recategorize_dir(test_path, categories[1])
+
 print('Program Done.')
