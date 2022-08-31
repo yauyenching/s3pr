@@ -1,3 +1,5 @@
+from importlib.abc import ResourceReader
+from ResourceChanger import ResourceChanger
 import clr
 clr.AddReference("../__libraries/s3pi/s3pi.Interfaces")
 clr.AddReference("../__libraries/s3pi/s3pi.WrapperDealer")
@@ -10,21 +12,20 @@ from s3pi.Package import Package
 from s3pi.WrapperDealer import WrapperDealer
 import System.Drawing
 import System.IO
-from Pattern import Pattern
 import os
 
 
-class PackageReader:
+class PatternRecategorizer:
     class NotPackageFile(Exception):
         pass
     
-    def read(path: str) -> Pattern:
-        pattern = Pattern()
+    def recategorize(path: str, new_category: str) -> None:
+        resource_changer = ResourceChanger(new_category)
         
         filename, extension = os.path.splitext(path)
         if extension != '.package':
-            raise PackageReader.NotPackageFile
-        package = Package.OpenPackage(0, path, False)
+            raise PatternRecategorizer.NotPackageFile
+        package = Package.OpenPackage(0, path, True)
         resources = package.GetResourceList
         
         for indexEntry in resources:
@@ -44,8 +45,15 @@ class PackageReader:
                 xml_resource = WrapperDealer.GetResource(0, package, indexEntry)
                 stream = xml_resource.Stream
                 xml = System.Text.UTF8Encoding.UTF8.GetString(xml_resource.AsBytes)
-                # print(xml)
-                pattern.xml = xml
+                # Recategorize pattern in xml
+                xml = resource_changer.change_xml(xml)
+                # Create tmp resource file and write the new xml
+                tmp = WrapperDealer.CreateNewResource(0, str(resource_type))
+                tmp.Stream.Position = 0
+                System.IO.BinaryWriter(tmp.Stream).Write(bytes(xml, 'utf-8'));
+                # Replace the resource
+                package.ReplaceResource(indexEntry, tmp)
+                
                 
             # Get patternlist resource
             if resource_type == 0xD4D9FBE5:
@@ -53,8 +61,7 @@ class PackageReader:
                 stream = ptrn_resource.Stream
                 ptrn = System.Text.UTF8Encoding.UTF8.GetString(ptrn_resource.AsBytes)
                 # print(xml)
-                pattern.ptrn = ptrn
                 
+        package.SavePackage()
         Package.ClosePackage(0, package)
         
-        return pattern

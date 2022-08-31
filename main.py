@@ -1,4 +1,4 @@
-from PackageReader import PackageReader
+from PackageReader import PatternRecategorizer
 from ResourceChanger import ResourceChanger
 
 test_file = 'Simlicious_pattern_AcidWashDenim_big.package'
@@ -19,7 +19,9 @@ categories = ['Fabric',
               'Masonry',
               'Rock_Stone']
 
-pattern = PackageReader.read(test_file)
-# test = ResourceChanger(pattern, categories[1])
-# test.change_ptrn()
+pattern = PatternRecategorizer.recategorize(test_file, categories[1])
+# pattern.change_category(categories[1])
+# print(pattern.xml)
+# print('\n')
+# print(pattern.ptrn)
 print('Program Done.')
