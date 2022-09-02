@@ -2,7 +2,7 @@ import os
 import tkinter as tk
 from tkinter import filedialog, messagebox
 from PatternRecategorizer import PatternRecategorizer
-import time
+import sys
 
 import customtkinter as ctk
 
@@ -33,7 +33,7 @@ class App(ctk.CTk):
                   'Geometric',
                   'Masonry',
                   'Rock_Stone']
-
+    
     def __init__(self):
         super().__init__()
 
@@ -42,16 +42,18 @@ class App(ctk.CTk):
         # call .on_closing() when app gets closed
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.resizable(0,0)
+        self.iconbitmap(r'assets/icon.ico')
 
         self.path_dir = tk.StringVar()
         self.extract_icon = tk.BooleanVar(value=True)
         self.change_category = tk.BooleanVar(value=True)
+        self.overwrite = tk.BooleanVar(value=False)
         self.status_update = tk.StringVar()
         self.progress = 0
 
         # ================ methods ==================
 
-        def recategorize_dir(path: str, new_category: str, extract_icon: bool, change_category: bool):
+        def recategorize_dir(path: str, new_category: str, overwrite: bool, extract_icon: bool, change_category: bool):
             self.progress_bar.set(0)
             skipped_files = 0
             completed_files = 0
@@ -62,7 +64,7 @@ class App(ctk.CTk):
                 try:
                     # print(filename)
                     self.status_update.set(f"Working on {filename}")
-                    PatternRecategorizer().recategorize(f, new_category, extract_icon, change_category)
+                    PatternRecategorizer(new_category).recategorize(f, extract_icon, overwrite, change_category)
                     completed_files += 1
                     # time.sleep(0.1)
                 except Exception as e:
@@ -78,6 +80,12 @@ class App(ctk.CTk):
             else:
                 self.status_update.set(
                     f"Completed {completed_files} files. Skipped {skipped_files} non-pattern/non-.package files.")
+                
+        def extract_icon_callback():
+            if self.extract_icon.get():
+                self.overwrite_checkbox.configure(state=tk.NORMAL)
+            else:
+                self.overwrite_checkbox.configure(state=tk.DISABLED)
 
         def get_folder_path_callback():
             dir = filedialog.askdirectory(
@@ -87,10 +95,11 @@ class App(ctk.CTk):
         def run_program():
             path = self.path_dir.get()
             extract_icon = self.extract_icon.get()
+            overwrite = self.overwrite.get()
             change_category = self.change_category.get()
             new_category = self.category_menu.get()
             print(
-                f"dir:{path}, extract_icon: {extract_icon}, change_category:{change_category}, new_category={self.category_menu.get()}")
+                f"dir:{path}, extract_icon: {extract_icon}, overwrite: {overwrite}, change_category:{change_category}, new_category={new_category}")
             if path == "":
                 messagebox.showerror(
                     'Empty Directory', 'Error: You need to choose a directory!')
@@ -101,7 +110,8 @@ class App(ctk.CTk):
                 messagebox.showerror(
                     'Program Error', 'Nothing for me to do: All program options are turned off!\n¯\_(ツ)_/¯')
             else:
-                recategorize_dir(path, new_category, extract_icon, change_category)
+                # pass
+                recategorize_dir(path, new_category, overwrite, extract_icon, change_category)
 
         # ============ create two rows ============
         # configure grid layout (1x2)
@@ -156,7 +166,7 @@ class App(ctk.CTk):
 
         self.progress_bar = ctk.CTkProgressBar(self.row_2, height=15)
         self.progress_bar.grid(row=1, column=0, padx=(
-            15, 0), sticky='we', columnspan=9, pady=(10, 0))
+            15, 10), sticky='we', columnspan=9, pady=(10, 0))
         self.progress_bar.set(0)
 
         # Creating a photoimage object to use image
@@ -173,8 +183,12 @@ class App(ctk.CTk):
             row=2, column=0, sticky='we', padx=(15, 10), pady=10)
 
         self.extract_icon_checkbox = ctk.CTkCheckBox(
-            self.row_2, text="Extract icon", border_width=1.5, width=16, height=16, corner_radius=5, pady=10, variable=self.extract_icon, onvalue=True, offvalue=False)
-        self.extract_icon_checkbox.grid(row=2, column=8)
+            self.row_2, text="Extract icon", border_width=1.5, width=16, height=16, corner_radius=5, pady=10, variable=self.extract_icon, onvalue=True, offvalue=False, command=extract_icon_callback)
+        self.extract_icon_checkbox.grid(row=2, column=7)
+        
+        self.overwrite_checkbox = ctk.CTkCheckBox(
+            self.row_2, text="Overwrite icon with\nsame filename", border_width=1.5, width=16, height=16, corner_radius=5, pady=10, variable=self.overwrite, onvalue=True, offvalue=False)
+        self.overwrite_checkbox.grid(row=2, column=8, padx=10)
 
         self.change_category_checkbox = ctk.CTkCheckBox(
             self.row_2, text="Change category", border_width=1.5, width=16, height=16, corner_radius=5, pady=10, variable=self.change_category, onvalue=True, offvalue=False)
@@ -191,5 +205,17 @@ class App(ctk.CTk):
 
 
 if __name__ == "__main__":
-    app = App()
-    app.mainloop()
+    # app = App()
+    # app.mainloop()
+    
+    if hasattr(sys, '_MEIPASS'):
+        saved_dir = os.getcwd()
+        os.chdir(sys._MEIPASS)
+        try:
+            app = App()
+            app.mainloop()
+        finally:
+            os.chdir(saved_dir)
+    else:
+        app = App()
+        app.mainloop()

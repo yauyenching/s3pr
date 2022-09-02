@@ -1,8 +1,10 @@
 import clr
-clr.AddReference("../__libraries/s3pi/s3pi.Interfaces")
-clr.AddReference("../__libraries/s3pi/s3pi.WrapperDealer")
-clr.AddReference("../__libraries/s3pi/s3pi.Package")
-clr.AddReference("../__libraries/s3pi/s3pi.ImageResource")
+import sys
+sys.path.insert(0, "s3pi")
+clr.AddReference("s3pi.Interfaces")
+clr.AddReference("s3pi.WrapperDealer")
+clr.AddReference("s3pi.Package")
+clr.AddReference("s3pi.DefaultResource")
 clr.AddReference("System.Drawing")
 
 from ResourceChanger import ResourceChanger
@@ -18,10 +20,12 @@ class PatternRecategorizer:
     class NotPackageFile(Exception):
         pass
     
+    def __init__(self, new_category):
+        self.resource_changer = ResourceChanger(new_category)
+    
     index = 2
 
-    def recategorize(self, path: str, new_category: str, extract_icon: bool = True, change_category: bool = True) -> None:
-        resource_changer = ResourceChanger(new_category)
+    def recategorize(self, path: str, extract_icon: bool = True, overwrite: bool = False, change_category: bool = True) -> None:
 
         filename, extension = os.path.splitext(path)
         if extension != '.package':
@@ -53,7 +57,7 @@ class PatternRecategorizer:
                     stream = image_resource.Stream
                     image = System.Drawing.Image.FromStream(stream)
                     image_filename = filename + '.png'
-                    if os.path.exists(image_filename):
+                    if os.path.exists(image_filename) and not overwrite:
                         image_filename = filename + f"_{self.index}.png"
                         while(os.path.exists(image_filename)):
                             self.index += 1
@@ -67,14 +71,14 @@ class PatternRecategorizer:
                 if resource_type == 0x0333406C:
                     xml_resource = extract_resource(package, indexEntry)
                     # Recategorize pattern in xml
-                    xml = resource_changer.change_xml(xml_resource)
+                    xml = self.resource_changer.change_xml(xml_resource)
                     write_resource(package, indexEntry, xml, resource_type)
 
                 # Get patternlist resource
                 if resource_type == 0xD4D9FBE5:
                     ptrn_resource = extract_resource(package, indexEntry)
                     # Recategorize pattern in ptrn
-                    xml = resource_changer.change_ptrn(ptrn_resource)
+                    xml = self.resource_changer.change_ptrn(ptrn_resource)
                     write_resource(package, indexEntry, xml, resource_type)
 
         package.SavePackage()

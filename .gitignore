@@ -4,3 +4,11 @@ __pycache__/
 # Ignore test files
 *.png
 *.package
+*.psd
+
+# Ignore library files
+s3pi/
+
+# Ignore distribution files
+dist/
+build/

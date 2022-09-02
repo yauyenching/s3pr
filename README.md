@@ -10,12 +10,11 @@
 <h3 align="center">🔨 This project is currently in development!</h3>
 
 ## ⭐ Proposed Features ##
-❔ - potential features that may or may not be implemented
 * [x] Decodes pattern XML and change category at appropriate place
 * [x] Extract icon file and save it in same root folder as file
-* [ ] Executable file
-  * ~~[ ] Drag-and-drop capabilities as a mean of loading your files~~
-  * ~~[ ] Prompt user to input new pattern category~~
+* [x] Executable file
+  * [ ] ~~Drag-and-drop capabilities as a mean of loading your files~~
+  * [ ] ~~Prompt user to input new pattern category~~
 * [X] Simple GUI
   * [X] Set load and save directory file path
   * [X] Set new pattern category
