@@ -11,8 +11,8 @@
 
 ## ⭐ Proposed Features ##
 ❔ - potential features that may or may not be implemented
-* [ ] Decodes pattern XML and change category at appropriate place
-* [ ] Extract icon file and save it in same root folder as file
+* [x] Decodes pattern XML and change category at appropriate place
+* [x] Extract icon file and save it in same root folder as file
 * [ ] Executable file
   * [ ] Drag-and-drop capabilities as a mean of loading your files
   * [ ] Prompt user to input new pattern category
