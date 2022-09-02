@@ -17,8 +17,10 @@ import os
 class PatternRecategorizer:
     class NotPackageFile(Exception):
         pass
+    
+    index = 2
 
-    def recategorize(path: str, new_category: str) -> None:
+    def recategorize(self, path: str, new_category: str, extract_icon: bool = True, change_category: bool = True) -> None:
         resource_changer = ResourceChanger(new_category)
 
         filename, extension = os.path.splitext(path)
@@ -42,29 +44,38 @@ class PatternRecategorizer:
         resources = package.GetResourceList
         for indexEntry in resources:
             resource_type = indexEntry.ResourceType
+            
+            if extract_icon:
+                # Get Icon Image from ICON Resource (different res types for small medium, large, very large)
+                icon_res_types = [0x2E75C764, 0x2E75C765, 0x2E75C766, 0x2E75C767]
+                if resource_type in icon_res_types:
+                    image_resource = WrapperDealer.GetResource(0, package, indexEntry)
+                    stream = image_resource.Stream
+                    image = System.Drawing.Image.FromStream(stream)
+                    image_filename = filename + '.png'
+                    if os.path.exists(image_filename):
+                        image_filename = filename + f"_{self.index}.png"
+                        while(os.path.exists(image_filename)):
+                            self.index += 1
+                            image_filename = filename + f"_{self.index}.png"
+                    image.Save(image_filename)
+                        
+                        
 
-            # Get Icon Image from ICON Resource (different res types for small medium, large, very large)
-            icon_res_types = [0x2E75C764, 0x2E75C765, 0x2E75C766, 0x2E75C767]
-            if resource_type in icon_res_types:
-                image_resource = IResource(
-                    WrapperDealer.GetResource(0, package, indexEntry))
-                stream = image_resource.Stream
-                image = System.Drawing.Image.FromStream(stream)
-                image.Save(filename + ".png")
+            if change_category:
+                # Get pattern xml ressource
+                if resource_type == 0x0333406C:
+                    xml_resource = extract_resource(package, indexEntry)
+                    # Recategorize pattern in xml
+                    xml = resource_changer.change_xml(xml_resource)
+                    write_resource(package, indexEntry, xml, resource_type)
 
-            # Get pattern xml ressource
-            if resource_type == 0x0333406C:
-                xml_resource = extract_resource(package, indexEntry)
-                # Recategorize pattern in xml
-                xml = resource_changer.change_xml(xml_resource)
-                write_resource(package, indexEntry, xml, resource_type)
-
-            # Get patternlist resource
-            if resource_type == 0xD4D9FBE5:
-                ptrn_resource = extract_resource(package, indexEntry)
-                # Recategorize pattern in ptrn
-                xml = resource_changer.change_ptrn(ptrn_resource)
-                write_resource(package, indexEntry, xml, resource_type)
+                # Get patternlist resource
+                if resource_type == 0xD4D9FBE5:
+                    ptrn_resource = extract_resource(package, indexEntry)
+                    # Recategorize pattern in ptrn
+                    xml = resource_changer.change_ptrn(ptrn_resource)
+                    write_resource(package, indexEntry, xml, resource_type)
 
         package.SavePackage()
         Package.ClosePackage(0, package)
