@@ -10,13 +10,15 @@
 Executable file that can recategorize Sims 3 Pattern Custom Content (CC) and extract icons for better CC organization purposes.
 
 ## 💡 Motivation ##
-This niche tool is really mostly for my own purposes. I wanted my pattern CC to adhere to more consistent categories, and recategorizing manually for tons of files was soul-draining. So, I set out to automate the task. Sims 3 .package files are not readable by normal means, so this work would not have been possible without Peter L Jone's [s3pi](http://s3pi.sourceforge.net/) .NET library.
+This niche tool is really mostly for my own purposes. I wanted my pattern CC to adhere to more consistent categories. For example, one creator may categorize a floral pattern as *'Fabric'*, while another creator may categorize a different floral pattern as *'Theme'*. To have all floral patterns be the same category in-game, one would have to manually edit the files.
+
+Recategorizing manually for tons of files was soul-draining. So, I set out to automate the task. Sims 3 .package files are not readable by normal means, so this work would not have been possible without Peter L Jone's [s3pi](http://s3pi.sourceforge.net/) .NET library.
 
 
 ## ✨ Preview ##
 <div align="center">
     <img src="preview/application.png" width="600">
-  <h3>🔗 Download the executable <a href="">here</a>!</h3>
+  <h3>🔗 Download the executable <a href="https://github.com/yauyenching/sims-3-pattern-recategorizer/releases/download/v1.0.0/Sims3PatternRecategorizer.exe">here</a>!</h3>
 </div>
 
 ## ⭐ Features ##
