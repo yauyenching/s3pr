@@ -1,15 +1,25 @@
+<div align="center">
+  <img src="preview/icon.png" width="150">
+</div>
 <h1 align="center">Sims 3 Pattern Recategorizer</h1>
 <p align="center">
   <img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue">
   <img src="https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white">
 </p>
 
-**Vision**: Program that can recategorize Sims 3 Pattern Custom Content (CC) and extract icons for better CC organization purposes.
+Executable file that can recategorize Sims 3 Pattern Custom Content (CC) and extract icons for better CC organization purposes.
 
-<br>
-<h3 align="center">🔨 This project is currently in development!</h3>
+## 💡 Motivation ##
+This niche tool is really mostly for my own purposes. I wanted my pattern CC to adhere to more consistent categories, and recategorizing manually for tons of files was soul-draining. So, I set out to automate the task. Sims 3 .package files are not readable by normal means, so this work would not have been possible without Peter L Jone's [s3pi](http://s3pi.sourceforge.net/) .NET library.
 
-## ⭐ Proposed Features ##
+
+## ✨ Preview ##
+<div align="center">
+    <img src="preview/application.png" width="600">
+  <h3>🔗 Download the executable <a href="">here</a>!</h3>
+</div>
+
+## ⭐ Features ##
 * [x] Decodes pattern XML and change category at appropriate place
 * [x] Extract icon file and save it in same root folder as file
 * [x] Executable file
@@ -20,6 +30,46 @@
   * [X] Set new pattern category
   * [X] Option to toggle saving icon file
 
+## 🛠️ Implementation ##
+This project was coded using [pythonnet](https://github.com/pythonnet/pythonnet) to utilize .NET libraries in Python, [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter) to create a GUI with a modern interface, and [PyInstaller](https://github.com/pyinstaller/pyinstaller) to create the executable file.
+
+## 🧰 Dependencies ##
+Microsoft's [.NET Framework 4](https://www.microsoft.com/en-my/download/details.aspx?id=17851) and the following python packages:
+* pythonnet
+* beautifulsoup4
+* lxml
+* customtkinter
+
+The versions used can be found in [requirements.txt](https://github.com/yauyenching/sims-3-pattern-recategorizer/blob/main/requirements.txt).
+
+## ⚙️ Building this Project ##
+Install [Python](https://www.python.org/) on your system if you have yet to do so.  Then, run `pip install -r requirements.txt` to install all dependencies.
+
+Then, in the cloned repo, run `python ProgramGUI.py`.
+
+## 📖 Documentation ##
+### PatternRecategorizer ###
+Class that reads .package file and extract resources and calls on the ResourceChanger class to change pattern category based on user settings.
+
+### ResourceChanger ###
+Class that rewrites specific resources within xml type files.
+
+### ProgramGUI ###
+Class that forms the main GUI for the program. Produces error messages in the case of invalid run options and then uses a loop to run through each file in the chosen directory.
+
 ## 📝 License ##
 This project is licensed under the GNU GPLv3 License - see the [LICENSE](https://github.com/yauyenching/sims-3-pattern-recategorizer/blob/main/LICENSE) file for details.
 
+## 🙌🏻 Acknowledgements ##
+This tool was something I built primarily for my own incredibly niche uses. I found lots of satisfaction in being able to build a standalone desktop application. This project would not have been possible without our forefathers in Sims 3 tool modding: 
+
+* [Anja Knackstedt's Pattern Preset Color Extractor](https://code.google.com/archive/p/pattern-preset-color-extractor/) for building a fabulous tool whose code I heavily referenced for reading .package files and extracting the correct resources for patterns
+* [Delphy's Sims 3 Pack Multi-Extracter](https://modthesims.info/d/364038/delphy-s-sims-3-pack-multi-extracter-updated-5th-sept-2009.html) for their useful tool that I referenced when building the UI
+* [Peter L Jone's s3pi](s3pi.sourceforge.net/) for creating an indispensable library to work with Sims 3 files
+
+Finally, I want to thank the following creators of the assets I used:
+* Freepik[[1]](https://www.flaticon.com/free-icon/energy_2990806?term=execute&page=1&position=56&page=1&position=56&related_id=2990806&origin=style)[[2]](https://www.flaticon.com/free-icon/scraps_7096819?related_id=7096819&origin=search)
+* [kmg jones](https://www.flaticon.com/free-icon/open-folder_3748664?term=open+folder&page=1&position=3&page=1&position=3&related_id=3748664&origin=style)
+* [srip](https://www.flaticon.com/free-icon/double-wrench_1105683?term=wrench&page=1&position=29&page=1&position=29&related_id=1105683&origin=style)
+
+And I got the Sims Plumbob asset from [here](https://wallpapersafari.com/w/Vm27TR).

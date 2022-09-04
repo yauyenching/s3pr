@@ -6,11 +6,9 @@ block_cipher = None
 
 a = Analysis(
     ['ProgramGUI.py'],
-    pathex=[],
-    binaries=[('s3pi/s3pi.Interfaces.dll', '.'),
-              ('s3pi/s3pi.WrapperDealer.dll', '.'),
-              ('s3pi/s3pi.Package.dll', '.'),
-              ('s3pi/s3pi.DefaultResource.dll', '.'),
+    pathex=['D:\\Users\\yenching\\projects\\sims-3-pattern-recategorizer\\venv\\Lib\\site-packages'],
+    binaries=[
+              ('s3pi/*', 's3pi'),
               ('C:\\Users\\yenching\\AppData\\Roaming\\Python\\Python310\\site-packages\\customtkinter', 'customtkinter')
              ],
     datas=[('assets/icon.ico', 'assets'),

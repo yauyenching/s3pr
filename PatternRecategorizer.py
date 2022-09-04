@@ -1,10 +1,8 @@
 import clr
-import sys
-sys.path.insert(0, "s3pi")
-clr.AddReference("s3pi.Interfaces")
-clr.AddReference("s3pi.WrapperDealer")
-clr.AddReference("s3pi.Package")
-clr.AddReference("s3pi.DefaultResource")
+clr.AddReference("s3pi/s3pi.Interfaces")
+clr.AddReference("s3pi/s3pi.WrapperDealer")
+clr.AddReference("s3pi/s3pi.Package")
+clr.AddReference("s3pi/s3pi.DefaultResource")
 clr.AddReference("System.Drawing")
 
 from ResourceChanger import ResourceChanger

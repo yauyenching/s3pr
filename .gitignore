@@ -1,13 +1,8 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
-# Ignore test files
-*.png
-*.package
+# Ignore design files
 *.psd
-
-# Ignore library files
-s3pi/
 
 # Ignore distribution files
 dist/
