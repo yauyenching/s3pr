@@ -10,13 +10,14 @@
 Executable file that can recategorize Sims 3 Pattern Custom Content (CC) and extract icons for better CC organization purposes.
 
 ## 💡 Motivation ##
-This niche tool is really mostly for my own purposes. I wanted my pattern CC to adhere to more consistent categories. For example, one creator may categorize a floral pattern as *'Fabric'*, while another creator may categorize a different floral pattern as *'Theme'*. To have all floral patterns be the same category in-game, one would have to manually edit the files.
+This tool is really mostly for my own purposes. I wanted my pattern CC to adhere to more consistent categories. For example, one creator may categorize a floral pattern as *'Fabric'*, while another creator may categorize a different floral pattern as *'Theme'*. To have all floral patterns be the same category in-game, one would have to manually edit the files.
 
-Recategorizing manually for tons of files was soul-draining. So, I set out to automate the task. Sims 3 .package files are not readable by normal means, so this work would not have been possible without Peter L Jone's [s3pi](http://s3pi.sourceforge.net/) .NET library.
+Recategorizing manually for tons of files was soul-sucking. So, I set out to automate the task. Sims 3 .package files are not readable by normal means, so this work would not have been possible without Peter L Jone's [s3pi](http://s3pi.sourceforge.net/) .NET library.
 
 
 ## ✨ Preview ##
 <div align="center">
+    <img src="preview/application-light.png" width="600">
     <img src="preview/application.png" width="600">
   <h3>🔗 Download the executable <a href="https://github.com/yauyenching/sims-3-pattern-recategorizer/releases/download/v1.0.0/Sims3PatternRecategorizer.exe">here</a>!</h3>
 </div>
@@ -67,7 +68,7 @@ This tool was something I built primarily for my own incredibly niche uses. I fo
 
 * [Anja Knackstedt's Pattern Preset Color Extractor](https://code.google.com/archive/p/pattern-preset-color-extractor/) for building a fabulous tool whose code I heavily referenced for reading .package files and extracting the correct resources for patterns
 * [Delphy's Sims 3 Pack Multi-Extracter](https://modthesims.info/d/364038/delphy-s-sims-3-pack-multi-extracter-updated-5th-sept-2009.html) for their useful tool that I referenced when building the UI
-* [Peter L Jone's s3pi](s3pi.sourceforge.net/) for creating an indispensable library to work with Sims 3 files
+* [Peter L Jone's s3pi](http://s3pi.sourceforge.net/) for creating an indispensable library to work with Sims 3 files
 
 Finally, I want to thank the following creators of the assets I used:
 * Freepik[[1]](https://www.flaticon.com/free-icon/energy_2990806?term=execute&page=1&position=56&page=1&position=56&related_id=2990806&origin=style)[[2]](https://www.flaticon.com/free-icon/scraps_7096819?related_id=7096819&origin=search)

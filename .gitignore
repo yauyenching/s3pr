@@ -3,6 +3,7 @@ __pycache__/
 
 # Ignore design files
 *.psd
+post-*.png
 
 # Ignore distribution files
 dist/
