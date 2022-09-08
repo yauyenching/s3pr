@@ -205,17 +205,5 @@ class App(ctk.CTk):
 
 
 if __name__ == "__main__":
-    # app = App()
-    # app.mainloop()
-    
-    if hasattr(sys, '_MEIPASS'):
-        saved_dir = os.getcwd()
-        os.chdir(sys._MEIPASS)
-        try:
-            app = App()
-            app.mainloop()
-        finally:
-            os.chdir(saved_dir)
-    else:
-        app = App()
-        app.mainloop()
+    app = App()
+    app.mainloop()
