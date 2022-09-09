@@ -33,9 +33,11 @@ Recategorizing manually for tons of files was soul-sucking. So, I set out to aut
   * [X] Set new pattern category
   * [X] Option to toggle saving icon file
   
-Upon a test user's request:
+Upon a test user's request (DEVELOPMENT HALTED UNTIL FURTHER NOTICE):
 * [x] Change pattern in another internal XML resource to be more consistent
 * [ ] Recategorizes .sims3pack pattern files as well (and not just .package files)
+  * Successfully extracted .package from .sims3pack and recategorized that
+  * Next step: repackaging into .sims3pack without loss of information
 * [ ] Advanced options
   * [ ] Able to change surface material
   * [ ] Able to change pattern description
@@ -59,13 +61,25 @@ Then, in the cloned repo, run `python ProgramGUI.py`.
 
 ## 📖 Documentation ##
 ### PatternRecategorizer ###
-Class that reads .package file and extract resources and calls on the ResourceChanger class to change pattern category based on user settings.
+Class that extracts and modifies resources in .package file and calls on the ResourceChanger class to change pattern category based on user settings.
 
 ### ResourceChanger ###
 Class that rewrites specific resources within xml type files.
 
 ### ProgramGUI ###
 Class that forms the main GUI for the program. Produces error messages in the case of invalid run options and then uses a loop to run through each file in the chosen directory.
+
+### Package ###
+Wrapper to handle .package files.
+
+### Sims3Pack ###
+Handler for .sims3pack files. (Unfinished)
+
+## 🤝🏻 How to Contribute ##
+Fork this repository, implement a feature, and open a pull request!
+
+Contributions are very much **welcome**! There are several [features](#-features) that have been
+requested by users.
 
 ## 📝 License ##
 This project is licensed under the GNU GPLv3 License - see the [LICENSE](https://github.com/yauyenching/sims-3-pattern-recategorizer/blob/main/LICENSE) file for details.

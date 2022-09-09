@@ -65,12 +65,12 @@ class App(ctk.CTk):
             for file_count, filename in enumerate(files, 1):
                 f = os.path.join(path, filename)
                 name, extension = os.path.splitext(f)
-                if extension.lower() not in ['.package', '.sims3pack']:
-                    print('Skipped file that is not .package or .sims3pack')
-                    skipped_files += 1
-                    continue
                 # print(f)
                 try:
+                    if extension.lower() != '.package':
+                        print('Skipped file that is not .package')
+                        skipped_files += 1
+                        continue
                     # recategorizer.recategorize(f)
                     PackageRecategorizer.recategorize(f, name, recategorizer)
                     self.status_update.set(f"Working on {filename}")

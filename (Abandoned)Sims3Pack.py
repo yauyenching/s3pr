@@ -1,8 +1,8 @@
 import clr
+from PatternRecategorizer import PatternRecategorizer
+from Package import PackageRecategorizer
 import System.IO
 from System.IO import BinaryReader, BinaryWriter, FileStream, FileMode, FileAccess, FileInfo
-from PatternRecategorizer import PatternRecategorizer
-
 from bs4 import BeautifulSoup
 
 """
@@ -12,7 +12,7 @@ under the GNU General Public License v3.
 
 This code was converted to Python by me (Yau Yen Ching) for this program.
 """
-class Sims3Pack:
+class Sims3PackRecategorizer:
     def getLengthFromDWord(dword) -> int:
         byte0 = dword[0]
         byte1 = dword[1] * 0x100
@@ -37,17 +37,18 @@ class Sims3Pack:
 
         # read 1. DWORD 
         DWordLength = binaryReader.ReadBytes(self.DWORD);
-        stringLength = Sims3Pack.getLengthFromDWord(DWordLength);
+        stringLength = Sims3PackRecategorizer.getLengthFromDWord(DWordLength);
 
         # skip string part and WORD         
         binaryReader.BaseStream.Position += stringLength + self.WORD;
 
         # read 2. DWORD 
         DWordLength = binaryReader.ReadBytes(self.DWORD);
-        xmlLength = Sims3Pack.getLengthFromDWord(DWordLength);
+        xmlLength = Sims3PackRecategorizer.getLengthFromDWord(DWordLength);
 
         # read XML part and convert it
         XMLBytes = binaryReader.ReadBytes(xmlLength);
+        print(XMLBytes.Length)
         XMLPart = System.Text.UTF8Encoding.UTF8.GetString(XMLBytes);    
         # print(XMLPart)
         
@@ -62,21 +63,30 @@ class Sims3Pack:
         binaryReader.BaseStream.Position = BinaryStartPosition + Offset     
         
         packageBytes = binaryReader.ReadBytes(Length)
-        binaryReader.Close();
+        binaryReader.Close()
         
         packageSims3PackFileInfo = FileInfo(path)
         filename = packageSims3PackFileInfo.FullName
-        tmp_filepath = filename.replace(packageSims3PackFileInfo.Extension, "_tmp.package")
+        tmp_path = filename.replace(packageSims3PackFileInfo.Extension, "_tmp.package")
         # print(type(bytes(packageBytes, 'utf-8')))
 
-        destFile = FileStream(tmp_filepath, FileMode.Create, FileAccess.Write)
-        writeFile = BinaryWriter(destFile)
+        writeFile = BinaryWriter(FileStream(tmp_path, FileMode.Create, FileAccess.Write))
         writeFile.Write(packageBytes)
+        writeFile.Close()
         
-        return tmp_filepath
+        return (xml, tmp_path)
     
-    def recategorize(path: str, filename: str, recategorizer: PatternRecategorizer):
-        package = Package.OpenPackage(0, path, True)
+    def recategorize(self, tmp_path: str, xml: BeautifulSoup,
+                     filename: str, recategorizer: PatternRecategorizer):
+        PackageRecategorizer.recategorize(tmp_path, filename, recategorizer)
+        
+        Length = FileInfo(tmp_path).Length
+        xml.Length.string = str(Length)
+        
+        # len(bytes(str(xml), 'utf-8'))
+        writeFile = BinaryWriter(FileStream(tmp_path, FileMode.Create, FileAccess.Write))
+        writeFile.Close()
+        
         
         
 

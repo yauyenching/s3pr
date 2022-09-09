@@ -12,4 +12,5 @@ build/
 # Ignore test files
 main.py
 *.package
+*.sims3pack
 Simlicious_*.png
