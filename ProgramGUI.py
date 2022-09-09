@@ -2,7 +2,6 @@ import os
 import tkinter as tk
 from tkinter import filedialog, messagebox
 from PatternRecategorizer import PatternRecategorizer
-import sys
 
 import customtkinter as ctk
 
@@ -53,7 +52,9 @@ class App(ctk.CTk):
 
         # ================ methods ==================
 
-        def recategorize_dir(path: str, new_category: str, overwrite: bool, extract_icon: bool, change_category: bool):
+        def recategorize_dir(path: str, new_category: str, 
+                             overwrite: bool, extract_icon: bool, 
+                             change_category: bool):
             self.progress_bar.set(0)
             skipped_files = 0
             completed_files = 0

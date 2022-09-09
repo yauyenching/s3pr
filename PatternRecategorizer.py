@@ -76,8 +76,15 @@ class PatternRecategorizer:
                 if resource_type == 0xD4D9FBE5:
                     ptrn_resource = extract_resource(package, indexEntry)
                     # Recategorize pattern in ptrn
-                    xml = self.resource_changer.change_ptrn(ptrn_resource)
-                    write_resource(package, indexEntry, xml, resource_type)
+                    ptrn = self.resource_changer.change_ptrn(ptrn_resource)
+                    write_resource(package, indexEntry, ptrn, resource_type)
+                    
+                # Get pattern xml manifest
+                if resource_type == 0x73E93EEB:
+                    xml_manifest = extract_resource(package, indexEntry)
+                    # Recategorize pattern in manifest
+                    manifest = self.resource_changer.change_manifest(xml_manifest)
+                    write_resource(package, indexEntry, manifest, resource_type)
 
         package.SavePackage()
         Package.ClosePackage(0, package)

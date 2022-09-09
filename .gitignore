@@ -8,3 +8,8 @@ post-*.png
 # Ignore distribution files
 dist/
 build/
+
+# Ignore test files
+main.py
+*.package
+Simlicious_*.png

@@ -34,7 +34,7 @@ Recategorizing manually for tons of files was soul-sucking. So, I set out to aut
   * [X] Option to toggle saving icon file
   
 Upon a test user's request:
-* [ ] Change pattern in another internal XML resource to be more consistent
+* [x] Change pattern in another internal XML resource to be more consistent
 * [ ] Recategorizes .sims3pack pattern files as well (and not just .package files)
 * [ ] Advanced options
   * [ ] Able to change surface material

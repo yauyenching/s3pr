@@ -13,3 +13,8 @@ class ResourceChanger:
         pattern_list = BeautifulSoup(ptrn, "lxml").patternlist
         pattern_list.category['name'] = self.new_category
         return pattern_list.prettify()
+
+    def change_manifest(self, manifest) -> str:
+        pattern_manifest = BeautifulSoup(manifest, "xml")
+        pattern_manifest.matcategory.string = self.new_category
+        return str(pattern_manifest)
