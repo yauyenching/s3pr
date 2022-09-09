@@ -2,6 +2,7 @@ import os
 import tkinter as tk
 from tkinter import filedialog, messagebox
 from PatternRecategorizer import PatternRecategorizer
+from Package import PackageRecategorizer
 
 import customtkinter as ctk
 
@@ -60,12 +61,19 @@ class App(ctk.CTk):
             completed_files = 0
             files = list(filter(lambda x: os.path.isfile(os.path.join(path, x)), os.listdir(path)))
             num_files = len(files)
+            recategorizer = PatternRecategorizer(new_category, extract_icon, overwrite, change_category)
             for file_count, filename in enumerate(files, 1):
                 f = os.path.join(path, filename)
+                name, extension = os.path.splitext(f)
+                if extension.lower() not in ['.package', '.sims3pack']:
+                    print('Skipped file that is not .package or .sims3pack')
+                    skipped_files += 1
+                    continue
+                # print(f)
                 try:
-                    # print(filename)
+                    # recategorizer.recategorize(f)
+                    PackageRecategorizer.recategorize(f, name, recategorizer)
                     self.status_update.set(f"Working on {filename}")
-                    PatternRecategorizer(new_category).recategorize(f, extract_icon, overwrite, change_category)
                     completed_files += 1
                     # time.sleep(0.1)
                 except Exception as e:

@@ -13,23 +13,39 @@ import System.Drawing
 import System.IO
 import os
 
-
+"""
+I referenced how to extract pattern resources from Anja Knackstedt 
+who wrote code for the Pattern Preset Color Extractor
+<https://code.google.com/archive/p/pattern-preset-color-extractor/>
+under the GNU General Public License v3.
+"""
 class PatternRecategorizer:
-    class NotPackageFile(Exception):
-        pass
+    # class NotPackageFile(Exception):
+        # pass
     
-    def __init__(self, new_category):
+    def __init__(self, new_category: str, extract_icon: bool = True, 
+                 overwrite: bool = False, change_category: bool = True):
         self.resource_changer = ResourceChanger(new_category)
+        self.extract_icon = extract_icon
+        self.overwrite = overwrite
+        self.change_category = change_category
     
     index = 2
 
-    def recategorize(self, path: str, extract_icon: bool = True, overwrite: bool = False, change_category: bool = True) -> None:
-
+    def recategorize(self, path: str):
         filename, extension = os.path.splitext(path)
         if extension != '.package':
             raise PatternRecategorizer.NotPackageFile
         package = Package.OpenPackage(0, path, True)
+        
+        try:
+            self.recategorize_package(package, filename)
+        except Exception as e:
+            raise e
+        finally:
+            Package.ClosePackage(0, package)
 
+    def recategorize_package(self, package: Package, filename: str) -> None:
         def extract_resource(package: Package, indexEntry: IResourceIndexEntry) -> str:
             resource = WrapperDealer.GetResource(0, package, indexEntry)
             return System.Text.UTF8Encoding.UTF8.GetString(resource.AsBytes)
@@ -47,7 +63,7 @@ class PatternRecategorizer:
         for indexEntry in resources:
             resource_type = indexEntry.ResourceType
             
-            if extract_icon:
+            if self.extract_icon:
                 # Get Icon Image from ICON Resource (different res types for small medium, large, very large)
                 icon_res_types = [0x2E75C764, 0x2E75C765, 0x2E75C766, 0x2E75C767]
                 if resource_type in icon_res_types:
@@ -55,7 +71,7 @@ class PatternRecategorizer:
                     stream = image_resource.Stream
                     image = System.Drawing.Image.FromStream(stream)
                     image_filename = filename + '.png'
-                    if os.path.exists(image_filename) and not overwrite:
+                    if os.path.exists(image_filename) and not self.overwrite:
                         image_filename = filename + f"_{self.index}.png"
                         while(os.path.exists(image_filename)):
                             self.index += 1
@@ -64,7 +80,7 @@ class PatternRecategorizer:
                         
                         
 
-            if change_category:
+            if self.change_category:
                 # Get pattern xml ressource
                 if resource_type == 0x0333406C:
                     xml_resource = extract_resource(package, indexEntry)
@@ -87,4 +103,3 @@ class PatternRecategorizer:
                     write_resource(package, indexEntry, manifest, resource_type)
 
         package.SavePackage()
-        Package.ClosePackage(0, package)
