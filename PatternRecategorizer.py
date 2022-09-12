@@ -1,3 +1,9 @@
+import clr
+clr.AddReference("s3pi/s3pi.Interfaces")
+clr.AddReference("s3pi/s3pi.WrapperDealer")
+clr.AddReference("s3pi/s3pi.Package")
+clr.AddReference("s3pi/s3pi.DefaultResource")
+clr.AddReference("System.Drawing")
 import os
 import System.IO
 import System.Drawing
@@ -5,12 +11,6 @@ from s3pi.WrapperDealer import WrapperDealer
 from s3pi.Package import Package
 from s3pi.Interfaces import IResource, IResourceIndexEntry
 from ResourceChanger import ResourceChanger
-import clr
-clr.AddReference("s3pi/s3pi.Interfaces")
-clr.AddReference("s3pi/s3pi.WrapperDealer")
-clr.AddReference("s3pi/s3pi.Package")
-clr.AddReference("s3pi/s3pi.DefaultResource")
-clr.AddReference("System.Drawing")
 
 
 """
