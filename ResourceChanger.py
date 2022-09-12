@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 
+
 class ResourceChanger:
     def __init__(self, new_category: str):
         self.new_category = new_category
@@ -16,5 +17,10 @@ class ResourceChanger:
 
     def change_manifest(self, manifest) -> str:
         pattern_manifest = BeautifulSoup(manifest, "xml")
-        pattern_manifest.matcategory.string = self.new_category
+        mat_category = pattern_manifest.matcategory
+        if mat_category != None:
+            pattern_manifest.matcategory.string = self.new_category
+        else:
+            pattern_manifest.matCategory.string = self.new_category
+            # print(pattern_manifest.metatags.matCategory)
         return str(pattern_manifest)

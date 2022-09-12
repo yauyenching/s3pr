@@ -33,7 +33,7 @@ class App(ctk.CTk):
                   'Geometric',
                   'Masonry',
                   'Rock_Stone']
-    
+
     def __init__(self):
         super().__init__()
 
@@ -41,7 +41,7 @@ class App(ctk.CTk):
         self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
         # call .on_closing() when app gets closed
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
-        self.resizable(0,0)
+        self.resizable(0, 0)
         self.iconbitmap(r'assets/icon.ico')
 
         self.path_dir = tk.StringVar()
@@ -53,15 +53,17 @@ class App(ctk.CTk):
 
         # ================ methods ==================
 
-        def recategorize_dir(path: str, new_category: str, 
-                             overwrite: bool, extract_icon: bool, 
+        def recategorize_dir(path: str, new_category: str,
+                             overwrite: bool, extract_icon: bool,
                              change_category: bool):
             self.progress_bar.set(0)
             skipped_files = 0
             completed_files = 0
-            files = list(filter(lambda x: os.path.isfile(os.path.join(path, x)), os.listdir(path)))
+            files = list(filter(lambda x: os.path.isfile(
+                os.path.join(path, x)), os.listdir(path)))
             num_files = len(files)
-            recategorizer = PatternRecategorizer(new_category, extract_icon, overwrite, change_category)
+            recategorizer = PatternRecategorizer(
+                new_category, extract_icon, overwrite, change_category)
             for file_count, filename in enumerate(files, 1):
                 f = os.path.join(path, filename)
                 name, extension = os.path.splitext(f)
@@ -85,11 +87,12 @@ class App(ctk.CTk):
                     self.update()
 
             if completed_files == 0:
-                self.status_update.set("No pattern .package files found in folder.")
+                self.status_update.set(
+                    "No pattern .package files found in folder.")
             else:
                 self.status_update.set(
                     f"Completed {completed_files} files. Skipped {skipped_files} non-pattern/non-.package files.")
-                
+
         def extract_icon_callback():
             if self.extract_icon.get():
                 self.overwrite_checkbox.configure(state=tk.NORMAL)
@@ -120,7 +123,8 @@ class App(ctk.CTk):
                     'Program Error', 'Nothing for me to do: All program options are turned off!\n¯\_(ツ)_/¯')
             else:
                 # pass
-                recategorize_dir(path, new_category, overwrite, extract_icon, change_category)
+                recategorize_dir(path, new_category, overwrite,
+                                 extract_icon, change_category)
 
         # ============ create two rows ============
         # configure grid layout (1x2)
@@ -194,7 +198,7 @@ class App(ctk.CTk):
         self.extract_icon_checkbox = ctk.CTkCheckBox(
             self.row_2, text="Extract icon", border_width=1.5, width=16, height=16, corner_radius=5, pady=10, variable=self.extract_icon, onvalue=True, offvalue=False, command=extract_icon_callback)
         self.extract_icon_checkbox.grid(row=2, column=7)
-        
+
         self.overwrite_checkbox = ctk.CTkCheckBox(
             self.row_2, text="Overwrite icon with\nsame filename", border_width=1.5, width=16, height=16, corner_radius=5, pady=10, variable=self.overwrite, onvalue=True, offvalue=False)
         self.overwrite_checkbox.grid(row=2, column=8, padx=10)

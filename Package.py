@@ -9,6 +9,7 @@ class PackageRecategorizer:
         
         try:
             recategorizer.recategorize_package(package, filename)
+            package.SavePackage()
         except Exception as e:
             raise e
         finally:
