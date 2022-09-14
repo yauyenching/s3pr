@@ -22,9 +22,6 @@ under the GNU General Public License v3.
 
 
 class PatternRecategorizer:
-    # class NotPackageFile(Exception):
-    # pass
-
     def __init__(self, new_category: str, extract_icon: bool = True,
                  overwrite: bool = False, change_category: bool = True):
         self.resource_changer = ResourceChanger(new_category)
@@ -33,19 +30,9 @@ class PatternRecategorizer:
         self.change_category = change_category
 
     index = 2
-
-    def recategorize(self, path: str):
-        filename, extension = os.path.splitext(path)
-        if extension != '.package':
-            raise PatternRecategorizer.NotPackageFile
-        package = Package.OpenPackage(0, path, True)
-
-        try:
-            self.recategorize_package(package, filename)
-        except Exception as e:
-            raise e
-        finally:
-            Package.ClosePackage(0, package)
+    
+    class NoPTRNResources(Exception):
+        pass
 
     def recategorize_package(self, package: Package, filename: str) -> None:
         def extract_resource(package: Package, indexEntry: IResourceIndexEntry) -> str:
@@ -62,6 +49,7 @@ class PatternRecategorizer:
             package.ReplaceResource(indexEntry, tmp)
 
         resources = package.GetResourceList
+        found_ptrn = False
         for indexEntry in resources:
             resource_type = indexEntry.ResourceType
 
@@ -88,7 +76,8 @@ class PatternRecategorizer:
                     xml_resource = extract_resource(package, indexEntry)
                     # Recategorize pattern in xml
                     xml = self.resource_changer.change_xml(xml_resource)
-                    write_resource(package, indexEntry, xml, resource_type)
+                    if xml != None:
+                        write_resource(package, indexEntry, xml, resource_type)
 
                 # Get patternlist resource
                 if resource_type == 0xD4D9FBE5:
@@ -96,6 +85,7 @@ class PatternRecategorizer:
                     # Recategorize pattern in ptrn
                     ptrn = self.resource_changer.change_ptrn(ptrn_resource)
                     write_resource(package, indexEntry, ptrn, resource_type)
+                    found_ptrn = True
 
                 # Get pattern xml manifest
                 if resource_type == 0x73E93EEB:
@@ -103,5 +93,13 @@ class PatternRecategorizer:
                     # Recategorize pattern in manifest
                     manifest = self.resource_changer.change_manifest(
                         xml_manifest)
-                    write_resource(package, indexEntry,
-                                   manifest, resource_type)
+                    if manifest != None:
+                        write_resource(package, indexEntry,
+                                    manifest, resource_type)
+        
+        
+        if self.change_category and found_ptrn:
+            package.SavePackage()
+        elif self.change_category and not found_ptrn:
+            raise self.NoPTRNResources
+        

@@ -1,4 +1,5 @@
 import os
+import time
 import tkinter as tk
 from tkinter import filedialog, messagebox
 from PatternRecategorizer import PatternRecategorizer
@@ -64,6 +65,7 @@ class App(ctk.CTk):
             num_files = len(files)
             recategorizer = PatternRecategorizer(
                 new_category, extract_icon, overwrite, change_category)
+            start_time = time.perf_counter()
             for file_count, filename in enumerate(files, 1):
                 f = os.path.join(path, filename)
                 name, extension = os.path.splitext(f)
@@ -73,9 +75,10 @@ class App(ctk.CTk):
                         print('Skipped file that is not .package')
                         skipped_files += 1
                         continue
+                    self.status_update.set(f"Working on {filename}")
+                    self.update()
                     # recategorizer.recategorize(f)
                     PackageRecategorizer.recategorize(f, name, recategorizer)
-                    self.status_update.set(f"Working on {filename}")
                     completed_files += 1
                     # time.sleep(0.1)
                 except Exception as e:
@@ -86,12 +89,19 @@ class App(ctk.CTk):
                     self.progress_bar.set(file_count / num_files)
                     self.update()
 
+            end_time = time.perf_counter()
+            time_taken = end_time - start_time
             if completed_files == 0:
                 self.status_update.set(
-                    "No pattern .package files found in folder.")
+                    f"No pattern .package files found in folder.")
             else:
-                self.status_update.set(
-                    f"Completed {completed_files} files. Skipped {skipped_files} non-pattern/non-.package files.")
+                if change_category:
+                    self.status_update.set(
+                        f"Recategorized {completed_files} files in {time_taken:.2f} seconds. "
+                        f"Skipped {skipped_files} non-pattern/non-.package files.")
+                if extract_icon and not change_category:
+                    self.status_update.set(
+                        f"Completed extracting ICONs from {completed_files} files in {time_taken:.2f} seconds.")
 
         def extract_icon_callback():
             if self.extract_icon.get():
@@ -195,17 +205,24 @@ class App(ctk.CTk):
         self.category_menu.grid(
             row=2, column=0, sticky='we', padx=(15, 10), pady=10)
 
+        self.change_category_checkbox = ctk.CTkCheckBox(
+            self.row_2, text="Change category", 
+            border_width=1.5, width=16, height=16, corner_radius=5, pady=10, 
+            variable=self.change_category, onvalue=True, offvalue=False)
+        self.change_category_checkbox.grid(row=2, column=7, padx=(0, 30))
+
         self.extract_icon_checkbox = ctk.CTkCheckBox(
-            self.row_2, text="Extract icon", border_width=1.5, width=16, height=16, corner_radius=5, pady=10, variable=self.extract_icon, onvalue=True, offvalue=False, command=extract_icon_callback)
-        self.extract_icon_checkbox.grid(row=2, column=7)
+            self.row_2, text="Extract icon", 
+            border_width=1.5, width=16, height=16, corner_radius=5, pady=10, 
+            variable=self.extract_icon, onvalue=True, offvalue=False, 
+            command=extract_icon_callback)
+        self.extract_icon_checkbox.grid(row=2, column=8)
 
         self.overwrite_checkbox = ctk.CTkCheckBox(
-            self.row_2, text="Overwrite icon with\nsame filename", border_width=1.5, width=16, height=16, corner_radius=5, pady=10, variable=self.overwrite, onvalue=True, offvalue=False)
-        self.overwrite_checkbox.grid(row=2, column=8, padx=10)
-
-        self.change_category_checkbox = ctk.CTkCheckBox(
-            self.row_2, text="Change category", border_width=1.5, width=16, height=16, corner_radius=5, pady=10, variable=self.change_category, onvalue=True, offvalue=False)
-        self.change_category_checkbox.grid(row=2, column=9)
+            self.row_2, text="Overwrite icon with\nsame filename", 
+            border_width=1.5, width=16, height=16, corner_radius=5, pady=10, 
+            variable=self.overwrite, onvalue=True, offvalue=False)
+        self.overwrite_checkbox.grid(row=2, column=9)
 
         # ============ row_3 ============
 
