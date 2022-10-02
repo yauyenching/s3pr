@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white">
 </p>
 
-Executable file that can recategorize Sims 3 Pattern Custom Content (CC) and extract icons for better CC organization purposes.
+Executable file that can recategorize Sims 3 Pattern Custom Content (CC) and extract icons for better CC organization purposes. On 2nd October 2022, this tool was released for public use within the Sims 3 Tumblr community. See the community response [here](https://oxytosim.tumblr.com/post/696994286274805760/sims-3-pattern-recategorizer-s3pr-tool-organize).
 
 ## 💡 Motivation ##
 This tool is really mostly for my own purposes. I wanted my pattern CC to adhere to more consistent categories. For example, one creator may categorize a floral pattern as *'Fabric'*, while another creator may categorize a different floral pattern as *'Theme'*. To have all floral patterns be the same category in-game, one would have to manually edit the files.
@@ -19,7 +19,7 @@ Recategorizing manually for tons of files was soul-sucking. So, I set out to aut
 <div align="center">
     <img src="preview/application-light.png" width="600">
     <img src="preview/application.png" width="600">
-  <h3>🔗 Download the executable <a href="https://github.com/yauyenching/sims-3-pattern-recategorizer/releases/download/v1.0.0/Sims3PatternRecategorizer.exe">here</a>!</h3>
+  <h3>🔗 Download the executable <a href="https://github.com/yauyenching/sims-3-pattern-recategorizer/releases/download/v1.1.0.2/Sims3PatternRecategorizer_v1.1.0.2.zip">here</a>!</h3>
 </div>
 
 ## ⭐ Features ##
