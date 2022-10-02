@@ -5,6 +5,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue">
   <img src="https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white">
+  <img src="https://img.shields.io/badge/License-GPLv3-informational?style=for-the-badge">
 </p>
 
 Executable file that can recategorize Sims 3 Pattern Custom Content (CC) binary files and extract icons for better CC organization purposes. On 2nd October 2022, this tool was released for public use within the Sims 3 Tumblr community. See the community response [here](https://oxytosim.tumblr.com/post/696994286274805760/sims-3-pattern-recategorizer-s3pr-tool-organize).
